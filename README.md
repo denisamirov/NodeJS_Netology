@@ -1,2 +1,2 @@
-# homeWork and homeWork2 - homework 002-console
-# 004-stream - homework 004-stream
+# homework 002-console - homeWork1 and homeWork2
+# homework 004-stream - 004-stream

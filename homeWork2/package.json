@@ -4,7 +4,7 @@
   "description": "",
   "main": "home2.js",
   "bin": {
-    "game": "/.home2.js"
+    "game": "./home2.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
