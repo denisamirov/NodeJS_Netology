@@ -1,6 +1,6 @@
 //npm run dev city
 const http = require('http');
-const myAPIkey = process.env.myAPIkey;
+var myAPIkey = require('./config.js').myAPIkey;
 const city = process.argv[2];
 
 const url = `http://api.weatherstack.com/current?access_key=${myAPIkey}&query=${city}`;
