@@ -3,8 +3,8 @@ const router = express.Router();
 const {v4: uuid} = require('uuid');
 const fileMulter = require('../middleware/file')
 var dirName = require('../config').dirName;
-
-
+var library = require("../config").library;
+var book = require("../config").book;
 
 
 router.get('/', (req, res) => {
@@ -18,170 +18,176 @@ router.get('/', (req, res) => {
         "/api/books/:id/":"PUT: update book",
         "/api/books/:id//":"DELETE: delete book"
     }
-    res.json(listing);
+
+    const {Lib} = library;
+    res.render("index", {
+        title: "Книжки",
+        gallery: Lib,
+    })
 })
 
 
-router.get('/api/books/:id/download', (req, res) => {
+
+
+router.get('/:id/download', (req, res) => {
     const {Lib} = library;
     const {id} = req.params;
     const idx = Lib.findIndex(el => el.id === id)
 
     if (idx !== -1) {
         if (Lib[idx].fileBook !== "") {
-            res.sendFile(`${dirName}\\${Lib[idx].fileBook}`)
-            console.log("Ok")
-            res.status(201);
+            res.download(`${dirName}\\${Lib[idx].fileBook}`);
         } 
-        else {  res.json("404 || Not such file")  }
-        
+        else { res.redirect("/404"); 
+        console.log("ok f")
+         } 
         }
      
     else {
-            res.status(404);
-            res.json("Hey! This book undefined");
+        res.redirect("/404"); 
+        onsole.log("ok s")
         }
-        console.log("ok")
+   
     })
 
 
 
+
+
 //Get all book
-router.get('/api/books', (req,res) => {
-     const {Lib} = library;
-     res.json(Lib)
+router.get('/book', (req,res) => {
+    const {Lib} = library;
+    res.render("books/index", {
+        title: "Моя библиотека",
+        gallery: Lib,
+    })
  })
 
 
 //Get book by id
-router.get('/api/books/:id', (req,res) => {
+router.get('/book/:id', (req,res) => {
     const {Lib} = library;
     const {id} = req.params;
     const idx = Lib.findIndex(el => el.id === id)
 
     if (idx !== -1) {
-         res.json(Lib[idx])}
+        
+         res.render("books/view", {
+            title: "Книга | описание",
+            Lib: Lib[idx],
+        });}
 
     else {
-        res.status(404)
-        res.json('Item undefined')
+        res.redirect("/404"); 
         }
     })
 
 
-//User autorization
- router.post('/api/user/login', (req,res) => {
-     res.status(201)
-     res.json({
-         id: 1, 
-         mail: "test@mail.ru" 
-     })
- })
+
+router.get('/create', (req, res) => {
+    const {Lib} = library;
+    res.render("books/create", {
+        title: "Книга | Добавление",
+        Lib: {},
+    })
+});
 
 
-router.post('/api/books', 
-    fileMulter.single('cover-book'),
-    (req, res) => {
-        const {Lib} = library;
-        const {title, description, authors, favorite, fileCover, fileName, fileBook} = req.body;
-        const newBook = new book(title, description, authors, favorite, fileCover, fileName, fileBook);
+router.post('/create', fileMulter.single('fileBook'), (req, res) => {
+    const {Lib} = library;
+        const {title, description, authors, favourite, fileCover, fileName, fileBook} = req.body;
+        const newBook = new book(title, description, authors, favourite, fileCover, fileName, fileBook);
 
         if(req.file){
             const {filename, path} = req.file
-            // res.json({path})
+            newBook.fileBook = req.file.path;
+            newBook.fileName = req.file.filename;
         }
-        newBook.fileBook = req.file.path;
-        newBook.fileName = req.file.filename;
- 
+        
+
         Lib.push(newBook);
-        res.status(201);
-        res.json(newBook);
-    })
+
+    res.redirect('/')
+});
 
 
-//Update book
- router.put('/api/books/:id', 
-    fileMulter.single('cover-book'),
+
+//Update.get
+router.get('/update/:id', 
     (req,res) => {
         const {Lib} = library;
-        const {title, description, authors, favorite, fileCover, fileName, fileBook} = req.body;
+        const {title, description, authors, favourite, fileCover, fileName, fileBook} = req.body;
         const {id} = req.params;
         const idx = Lib.findIndex(el => el.id === id)
 
      if (idx !== -1) {
+        res.render("books/update", {
+            title: "Книга | редактирование",
+            lib: Lib[idx],
+        });    
+    }
+
+    else {
+        throw new Error('Something broke! ')}
+
+
+
+});
+
+//Update book
+ router.post('/update/:id', 
+    fileMulter.single('fileBook'),
+    (req,res) => {
+        const {Lib} = library;
+        const {title, description, authors, favourite, fileCover, fileName, fileBook} = req.body;
+        const {id} = req.params;
+        const idx = Lib.findIndex(el => el.id === id)
+
+     if (idx !== -1) {
+        
          Lib[idx] = {
-             ...Lib[idx],
+            ...Lib[idx],
             title,
             description,
             authors,
-            favorite,
-            fileCover,
-            fileName,
-            fileBook 
+            favourite,
+            fileCover
          }
 
-         Lib[idx].fileBook = req.file.path;
-         Lib[idx].fileName = req.file.filename;
-        
-         res.status(201);
-         res.json(Lib[idx]);
-     }
-    
-     else {
-         res.status(404);
-         res.json("Item undefined");
-     }
+         if(req.file){
+            Lib[idx].fileBook = req.file.path;
+            Lib[idx].fileName = req.file.filename;
+         }
 
- })
+         res.redirect('/book');
+
+            }
+
+        else {
+            res.redirect('/404');
+        } 
+
+    
+     
+})
 
 
 //Delete book
-router.delete('/api/books/:id', (req,res) => {
+router.post('/book/delete/:id', (req,res) => {
      const {Lib} = library;
      const {id} = req.params
      const idx = Lib.findIndex(el => el.id === id)
 
      if (idx !== -1) {
-         Lib.splice(idx, 1);
-         res.status(201);
-         res.json("Ok. Delete completed");
+        Lib.splice(idx, 1);
+         res.redirect("/book")
      }
      else {
-         res.status(404);
-         res.json('Item not found');
+         res.redirect("/404")
      }
-
  })
 
 
+
+
 module.exports=router;
-
-
-class book {
-    constructor(title="", description="", authors="", favourite="", fileCover="", fileName="", fileBook="", id=uuid()) {
-        this.id = id
-        this.title = title
-        this.description = description
-        this.authors = authors
-        this.favourite = favourite
-        this.fileCover = fileCover
-        this.fileName = fileName
-        this.fileBook = fileBook
-}}
-
-
-const library = {
-    Lib: [{id: "1",
-           title: "Капитанская дочка",
-           description: "О бунте Пугачева",
-           authors: "А.С.Пушкин",
-           fileBook: "public\\book\\1673555180319 - Screenshot_20230111_114125.jpg",
-           fileName: "1673555180319 - Screenshot_20230111_114125.jpg"},
-           {id: uuid(),
-            title: "Harry Potter",
-            description: "Wizard book",
-            authors: "Rowling J" }]
-}
-
-
-
