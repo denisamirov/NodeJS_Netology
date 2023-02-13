@@ -1,0 +1,30 @@
+services:
+  server:
+    image: node:alpine
+    environment:
+      - PORT=3000
+    ports:
+      - 80:3000
+    working_dir: /app1
+    volumes:
+      - ./service_1/:/app1
+    command: sleep infinity
+  counter:
+    image: node:alpine
+    environment:
+      - PORT=4000
+      - REDIS_URL=redis://storage
+    ports:
+      - 4000:4000
+    working_dir: /app2
+    volumes:
+      - ./service_2/:/app2
+    command: sleep infinity
+    depends_on:
+      - storage
+    links: ["server"]
+  storage:
+    image: redis
+    volumes:
+      - ./data:/data
+    
