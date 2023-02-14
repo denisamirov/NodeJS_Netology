@@ -9,12 +9,12 @@
             <div class="card-body">
 
                 <h5 class="card-title"><%= Lib.title %></h5>
-                <p class="card-text"><strong>Название:</strong> <%= Lib.title %></p>
-                <p class="card-text"><strong>Описание:</strong> <%= Lib.description %></p>
-                <p class="card-text"><strong>Авторы:</strong> <%= Lib.authors %></p>
+                <p class="card-text"><strong>Название:</strong><%= Lib.title %></p>
+                <p class="card-text"><strong>Описание:</strong><%= Lib.description %></p>
+                <p class="card-text"><strong>Авторы:</strong><%= Lib.authors %></p>
                 <p class="card-text"><strong>Избранная:</strong> <input type="checkbox" checked="<%= Lib.favorite %>"></p>
-                <p class="card-text"><strong>Файл:</strong> <%=Lib.fileName %><a href="/<%=Lib.id %>/download"><input type="button" value="скачать"></a></p>
-                <p class="card-text"><strong>Просмотры:</strong> <%= Lib.views %></p>
+                <p class="card-text"><strong>Файл:</strong><%=Lib.fileName %><a href="/<%=Lib.id %>/download"><input type="button" value="скачать"></a></p>
+                <p class="card-text"><strong>Просмотры: </strong><%= Lib.views %></p>
 
                 <div class="text-right">
                     <a class="btn btn-sm btn-primary" href="/update/<%= Lib.id %>">

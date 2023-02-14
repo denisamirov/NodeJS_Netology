@@ -5,8 +5,8 @@ const fileMulter = require('../middleware/file')
 var dirName = require('../config').dirName;
 var library = require("../config").library;
 var book = require("../config").book;
-const http = require('http');
 var db = require("./db");
+var incr = require("./incr");
 
 
 router.get('/', (req, res) => {
@@ -72,22 +72,23 @@ router.get('/book/:id', (req,res) => {
     const {id} = req.params;
     const idx = Lib.findIndex(el => el.id === id)
 
+    //Если найдена книга с данным id
     if (idx !== -1) {
-        db(idx)
-    
-        res.render("books/view", {
+       db(idx)      //Функция для увеличения счетчика 
+       res.render("books/view", {
             title: "Книга | описание",
-            Lib: Lib[idx],
-        });
+            Lib: Lib[idx]});
+       incr(idx)    //Функция для увеличения счетчика
     }
 
+    //Если не найдена книга, то выдать ошибку 404
     else {
         res.redirect("/404"); 
         }
     })
 
 
-
+//To create a new book. Open web-page
 router.get('/create', (req, res) => {
     const {Lib} = library;
     res.render("books/create", {
@@ -97,18 +98,17 @@ router.get('/create', (req, res) => {
 });
 
 
+//To create a new book. POST request
 router.post('/create', fileMulter.single('fileBook'), (req, res) => {
     const {Lib} = library;
         const {title, description, authors, favourite, fileCover, fileName, fileBook} = req.body;
         const newBook = new book(title, description, authors, favourite, fileCover, fileName, fileBook);
 
-        if(req.file){
+        if(req.file) {
             const {filename, path} = req.file
             newBook.fileBook = req.file.path;
-            newBook.fileName = req.file.filename;
-        }
+            newBook.fileName = req.file.filename;}
         
-
         Lib.push(newBook);
 
     res.redirect('/')
@@ -120,7 +120,6 @@ router.post('/create', fileMulter.single('fileBook'), (req, res) => {
 router.get('/update/:id', 
     (req,res) => {
         const {Lib} = library;
-        const {title, description, authors, favourite, fileCover, fileName, fileBook} = req.body;
         const {id} = req.params;
         const idx = Lib.findIndex(el => el.id === id)
 
@@ -133,8 +132,6 @@ router.get('/update/:id',
 
     else {
         throw new Error('Something broke! ')}
-
-
 
 });
 
@@ -170,8 +167,6 @@ router.get('/update/:id',
         else {
             res.redirect('/404');
         } 
-
-    
      
 })
 
@@ -190,7 +185,6 @@ router.post('/book/delete/:id', (req,res) => {
          res.redirect("/404")
      }
  })
-
 
 
 

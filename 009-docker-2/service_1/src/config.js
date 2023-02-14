@@ -18,7 +18,7 @@ module.exports = {
               fileName: "", }]
   },
   book: class book {
-    constructor(title="", description="", authors="", favourite="", fileCover="", fileName="", fileBook="", id=uuid(), views="") {
+    constructor(title="", description="", authors="", favourite="", fileCover="", fileName="", fileBook="", id=uuid(), views=0) {
         this.id = id
         this.title = title
         this.description = description
