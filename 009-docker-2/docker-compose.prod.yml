@@ -1,6 +1,6 @@
 services:
   server:
-    build: ./service_1
+    image: amirowdenis/lib:v0.0.1
     environment:
       - PORT=3000
     ports:
@@ -8,7 +8,7 @@ services:
     volumes:
       - ./service_1/:/app1
   counter:
-    build: ./service_2
+    image: amirowdenis/incr:v0.0.1
     environment:
       - PORT=4000
       - REDIS_URL=redis://storage
