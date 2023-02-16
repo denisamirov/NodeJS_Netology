@@ -5,8 +5,6 @@ services:
       - PORT=3000
     ports:
       - 80:3000
-    volumes:
-      - ./service_1/:/app1
   counter:
     build: ./service_2
     environment:
