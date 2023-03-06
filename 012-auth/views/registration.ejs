@@ -1,13 +1,18 @@
-<form action="/login" method="post">
+<%- include('./layout-start') %>
+<div class="main">
+<form action="/api/user/signup" method="post">
     <div>
-        <label>Логин:</label>
+        <label>Логин</label><br>
         <input type="text" name="username" /><br />
     </div>
     <div>
-        <label>Пароль:</label>
+        <label>Пароль</label><br>
         <input type="password" name="password" />
     </div>
     <div>
-        <input type="submit" value="Зарегистрироваться" />
+        <input class="btn btn-dark" type="submit" value="Зарегистрироваться" />
     </div>
+    <div><a href="/api/user/login"> Войти </a></div>
 </form>
+</div>
+<%- include('./layout-end') %>

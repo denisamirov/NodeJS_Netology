@@ -1,7 +1,12 @@
+<%- include('./layout-start') %>
+<div class="main">
 <% if (!user) { %>
-    <p>Главная</p> 
-    <p>Пожалуйста, <a href="/login"> авторизуйтесь </a></p>
+    <div id="main">Главная</div> 
+    <div><a href="/api/user/login"> Войти в аккаунт </a></div>
 <% } else { %>
-    <p>Привет, <%= user.username %>. </p>
-    <p>Перейти в <a href="/profile">профиль</a>.</p>
+    <div>Привет, <%= user.username %>. </div>
+    <div>Перейти в <a href="/api/user/me">профиль</a></div>
 <% } %>
+</div>
+
+<%- include('./layout-end') %>

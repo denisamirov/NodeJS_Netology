@@ -1,9 +1,9 @@
+<%- include('./layout-start') %>
+<div class="main">
 <p>
     <b>ID:</b>         <%= user._id %><br />
-    <b>Username:</b>   <%= user.login %><br />
-    <b>Name:</b>       <%= user.displayName %><br />
-    <% if (user.emails) { %>
-        <b>Email:</b>  <%= user.emails[0].value %><br />
-    <% } %>
+    <b>Username:</b>   <%= user.username %><br />
 </p>
 <a href="/logout">Выйти</a>
+</div>
+<%- include('./layout-end') %>
