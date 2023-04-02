@@ -1,0 +1,12 @@
+<%- include('./layout-start') %>
+<div class="main">
+<% if (!user) { %>
+    <div id="main">Главная</div> 
+    <div><a href="/api/user/login"> Войти в аккаунт </a></div>
+<% } else { %>
+    <div>Привет, <%= user.username %>. </div>
+    <div>Перейти в <a href="/api/user/me">профиль</a></div>
+<% } %>
+</div>
+
+<%- include('./layout-end') %>
