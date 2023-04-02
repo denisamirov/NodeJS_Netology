@@ -7,21 +7,6 @@ abstract class BookRepository {
     fileCover: string;
     fileName: string
 
-    constructor(id:string, 
-        title:string,
-        description: string,
-        authors: string,
-        favourite: string,
-        fileCover: string,
-        fileName: string, ) {
-            this.id = id;
-            this.title = title;
-            this.description = description;
-            this.authors = authors;
-            this.fileCover = fileCover;
-            this.fileName = fileName;
-
-    }
 
     createBook(book:object) {
         console.log(`new boo ${book}`)
