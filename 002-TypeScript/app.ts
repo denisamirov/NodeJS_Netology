@@ -8,19 +8,9 @@ abstract class BookRepository {
     fileName: string
 
 
-    createBook(book:object) {
-        console.log(`new boo ${book}`)
-    }
-    getBook(id:string) {
-        console.log(`get book with id - ${id}`)
-    }
-    getBooks() {
-        console.log("ok")
-    }
-    updateBook(id:string) {
-        console.log(`update book with id - ${id}`)
-    }
-    deleteBook(id:string) {
-        console.log(`delete book with id - ${id}`)
-    }
+    abstract createBook(book:object): void;
+    abstract getBook(id:string): void;
+    abstract getBooks(): void;
+    abstract updateBook(id:string): void;
+    abstract deleteBook(id:string): void;
 }
