@@ -1,2 +1,1 @@
-# homework 002-console - homeWork1 and homeWork2
-# homework 004-stream - 004-stream
+Здесь представлены выполненные домашние работы курса "Введение в Node.js, библиотека Express.js"
